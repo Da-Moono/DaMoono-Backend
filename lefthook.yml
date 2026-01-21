@@ -1,0 +1,15 @@
+pre-push:
+  parallel: false
+  commands:
+    lint:
+      run: |
+        npm run lint-format
+      fail_text: "❌ Lint/Format 실패! push하기 전, npm run lint-format 실행하여 에러 수정 후, 다시 push해주세요."
+
+pre-commit:
+  commands:
+    lint:
+      run: |
+        npm run lint-format
+      stage_fixed: true
+      fail_text: "❌ Lint/Format 실패! commit 하기 전, npm run lint-format 실행하여 에러 수정 후, 다시 push해주세요."
