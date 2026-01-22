@@ -2,27 +2,39 @@
   "name": "damoono-backend",
   "version": "1.0.0",
   "description": "backend of damoono",
-  "main": "src/app.ts",
+  "type": "module",
+  "main": "src/index.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
-    "start": "node build/src/app.js",
-    "dev": "nodemon --watch src --exec \"npm run build\"",
+    "start": "node build/src/index.js",
+    "dev": "tsx watch src/index.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "lint-format": "biome check --write"
   },
   "author": "haegang",
   "license": "ISC",
   "dependencies": {
+    "@langchain/community": "^0.3.21",
+    "@langchain/core": "^0.3.29",
+    "@langchain/openai": "^0.3.17",
     "cors": "^2.8.5",
-    "dotenv": "^17.2.3",
-    "express": "^5.2.1"
+    "dotenv": "^16.4.5",
+    "express": "^5.2.1",
+    "langchain": "^0.3.11"
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.11",
+    "@types/cors": "^2.8.17",
     "@types/express": "^5.0.6",
     "@types/node": "^25.0.9",
+    "fast-check": "^3.23.1",
     "lefthook": "^2.0.15",
     "nodemon": "^3.1.11",
     "tsc-alias": "^1.8.16",
-    "typescript": "^5.9.3"
+    "tsx": "^4.19.2",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1",
+    "vitest": "^3.0.8"
   }
 }
