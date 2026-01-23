@@ -21,7 +21,8 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^5.2.1",
-    "langchain": "^0.3.11"
+    "langchain": "^0.3.11",
+    "socket.io": "^4.8.3"
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.11",

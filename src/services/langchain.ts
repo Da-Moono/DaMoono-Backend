@@ -7,20 +7,18 @@ import {
 } from './promptBuilder';
 import { parseResponse } from './responseParser';
 
-/**
- * Interface for chat response with reply, type, and optional cards
- */
+// 챗봇 응답 인터페이스
 export interface ChatResponse {
   reply: string;
   type?: 'text' | 'plan' | 'subscription' | 'phone' | 'event';
   cards?: CardData[];
 }
 
-// OpenAI 모델 인스턴스 (Lazy initialization)
+// LangChain ChatOpenAI 모델 인스턴스 (싱글톤)
 let chatModel: ChatOpenAI | null = null;
 
-// ChatModel 가져오기 - 첫 호출 시에만 생성
-const getChatModel = () => {
+// LangChain ChatOpenAI 모델 가져오기
+const getChatModel = (): ChatOpenAI => {
   if (!chatModel) {
     const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
@@ -36,28 +34,16 @@ const getChatModel = () => {
   return chatModel;
 };
 
-/**
- * Handles chat requests with intelligent response generation.
- * This orchestrates the entire process:
- * 1. Analyze user intent
- * 2. Load relevant reference data based on intent
- * 3. Build prompt with context
- * 4. Call OpenAI
- * 5. Parse response
- *
- * Requirements: 1.1, 1.2, 1.3, 1.4, 3.3, 3.5, 4.1, 4.2, 4.5, 6.1, 6.2, 6.3, 6.4, 6.5, 7.3, 7.4
- *
- * @param message - The user's message
- * @param history - Conversation history
- * @returns ChatResponse with reply, type, and optional cards
- */
+// LangChain 기반 챗봇 요청 처리: 의도 분석 → 컨텍스트 로드 → 프롬프트 구성 → LLM 호출 → 응답 파싱
 export async function handleChatRequest(
   message: string,
   history: Array<{ role: 'user' | 'assistant'; content: string }>,
 ): Promise<ChatResponse> {
   try {
+    // 1. 의도 분석
     const intent = await analyzeIntent(message);
 
+    // 2. 참조 데이터 로드
     let referenceDataText: string | undefined;
 
     if (shouldIncludeReferenceData(intent.intent)) {
@@ -71,6 +57,7 @@ export async function handleChatRequest(
       }
     }
 
+    // 3. LangChain 프롬프트 메시지 구성
     const promptMessages = buildPromptWithContext({
       userMessage: message,
       history,
@@ -78,10 +65,12 @@ export async function handleChatRequest(
       referenceData: referenceDataText,
     });
 
+    // 4. LangChain 모델 호출
     const model = getChatModel();
     const response = await model.invoke(promptMessages);
     const aiResponse = response.content.toString();
 
+    // 5. 응답 파싱
     const parsedResponse = parseResponse(aiResponse, intent, referenceData);
 
     return {
@@ -94,15 +83,8 @@ export async function handleChatRequest(
   }
 }
 
-/**
- * Determines if reference data should be included based on intent type.
- * Help requests and general questions should not include product data.
- *
- * @param intentType - The type of intent
- * @returns True if reference data should be included
- */
+// 의도 타입에 따라 참조 데이터 포함 여부 결정
 function shouldIncludeReferenceData(intentType: IntentType): boolean {
-  // Don't include reference data for help requests or general questions
   if (
     intentType === IntentType.HELP_REQUEST ||
     intentType === IntentType.GENERAL_QUESTION
@@ -110,23 +92,13 @@ function shouldIncludeReferenceData(intentType: IntentType): boolean {
     return false;
   }
 
-  // Include reference data for product recommendations and event inquiries
   return true;
 }
 
-/**
- * Handles errors and returns user-friendly error messages.
- * Implements fallback mode for API failures.
- *
- * Requirements: 6.1, 6.2, 6.3, 6.4, 6.5
- *
- * @param error - The error that occurred
- * @param message - The original user message
- * @returns ChatResponse with error message
- */
+// 에러 핸들링 및 사용자 친화적 메시지 반환
 function handleError(error: unknown, message: string): ChatResponse {
   if (error instanceof Error) {
-    // API key errors (Requirement 6.1)
+    // API 키 오류
     if (
       error.message.includes('API key') ||
       error.message.includes('OPENAI_API_KEY')
@@ -138,7 +110,7 @@ function handleError(error: unknown, message: string): ChatResponse {
       };
     }
 
-    // Rate limiting errors (Requirement 6.1)
+    // Rate Limiting 오류
     if (error.message.includes('429') || error.message.includes('rate limit')) {
       return {
         reply:
@@ -147,19 +119,18 @@ function handleError(error: unknown, message: string): ChatResponse {
       };
     }
 
-    // Network/connection errors (Requirement 6.1, 6.3)
+    // 네트워크 오류 - Fallback 모드
     if (
       error.message.includes('network') ||
       error.message.includes('ECONNREFUSED') ||
       error.message.includes('ETIMEDOUT') ||
       error.message.includes('fetch failed')
     ) {
-      // Fallback mode - provide basic guidance (Requirement 6.3)
       return fallbackResponse(message);
     }
   }
 
-  // Generic error (Requirement 6.1, 6.5)
+  // 일반 오류
   return {
     reply:
       '죄송합니다. 일시적인 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
@@ -167,15 +138,7 @@ function handleError(error: unknown, message: string): ChatResponse {
   };
 }
 
-/**
- * Provides fallback responses when OpenAI API is unavailable.
- * Uses basic keyword matching to provide helpful guidance.
- *
- * Requirement 6.3
- *
- * @param message - The user's message
- * @returns ChatResponse with fallback message
- */
+// OpenAI API 사용 불가 시 키워드 기반 Fallback 응답 생성
 function fallbackResponse(message: string): ChatResponse {
   const lowerMessage = message.toLowerCase();
 
