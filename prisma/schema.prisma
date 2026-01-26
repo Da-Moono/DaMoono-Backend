@@ -29,3 +29,27 @@ model User {
   refreshTokenHash      String?  @db.VarChar(255)
   refreshTokenExpiresAt DateTime?
 }
+
+model Plan {
+  id                   Int    @id
+  name                 String
+  price                Int
+  data_amount_mb       Int
+  overage_speed_mbps   Decimal @db.Decimal(6, 2)
+  voice_minutes        Int
+  sms_included         Int
+  network_type         String
+  subscription_services Json
+  badges               Json
+}
+
+model Subscribe {
+  id            Int    @id
+  name          String
+  price         Int
+  monthly_price Int
+  category      String
+  benefits      Json
+  description   String @db.Text
+  badges        Json
+}

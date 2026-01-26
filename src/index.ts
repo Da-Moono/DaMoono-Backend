@@ -8,6 +8,7 @@ import { Server } from 'socket.io';
 import { fileURLToPath } from 'url';
 import authRouter from './routes/auth.js';
 import chatRouter from './routes/chat.js';
+import referenceRouter from './routes/reference.js';
 
 // ES 모듈에서 __dirname 구하기
 const __filename = fileURLToPath(import.meta.url);
@@ -161,6 +162,9 @@ app.use('/auth', authRouter);
 
 // 라우트
 app.use('/api', chatRouter);
+
+// 플랜 조회 api
+app.use('/reference', referenceRouter);
 
 // 세션 메시지 조회 API
 app.get('/api/sessions/:sessionId/messages', (req, res) => {
