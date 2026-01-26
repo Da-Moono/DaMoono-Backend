@@ -6,9 +6,10 @@
   "main": "src/index.ts",
   "scripts": {
     "build": "prisma generate && tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
-    "start": "npx prisma migrate deploy && node build/src/index.js",
+    "start": "npx prisma migrate deploy && npx prisma db seed && node build/src/index.js",
     "dev": "tsx watch src/index.ts",
-    "lint-format": "biome check --write"
+    "lint-format": "biome check --write",
+    "seed": "tsx prisma/seed.ts"
   },
   "author": "haegang",
   "license": "ISC",
