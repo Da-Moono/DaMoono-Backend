@@ -4,12 +4,15 @@
   "description": "backend of damoono",
   "type": "module",
   "main": "src/index.ts",
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
+
   "scripts": {
     "build": "prisma generate && tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
     "start": "npx prisma migrate deploy && npx prisma db seed && node build/src/index.js",
     "dev": "tsx watch src/index.ts",
-    "lint-format": "biome check --write",
-    "seed": "tsx prisma/seed.ts"
+    "lint-format": "biome check --write"
   },
   "author": "haegang",
   "license": "ISC",
