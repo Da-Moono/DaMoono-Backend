@@ -103,8 +103,8 @@ export async function refreshService(refreshToken: string) {
   const newAccessToken = signAccessToken({
     userId: user.userId,
     name: user.name,
+    role: user.role,
   });
-
   return {
     ok: true as const,
     accessToken: newAccessToken,

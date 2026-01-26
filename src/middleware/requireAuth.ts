@@ -1,10 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-
-type JwtUserPayload = {
-  userId: string;
-  name: string;
-};
+import type { JwtUserPayload } from '@/utils/jwt.js';
 
 export function requireAuth(req: Request, res: Response, next: NextFunction) {
   const accessToken = req.cookies?.accessToken;
@@ -23,7 +19,6 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
       process.env.JWT_ACCESS_SECRET!,
     ) as JwtUserPayload;
 
-    // ✅ 여기서 req.user에 로그인 정보 박아줌
     req.user = payload;
 
     return next();
