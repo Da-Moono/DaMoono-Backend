@@ -28,12 +28,15 @@ export async function loginService(userId: string, password: string) {
     };
   }
 
-  const payload = { userId: user.userId, name: user.name };
+  const payload = {
+    userId: user.userId,
+    name: user.name,
+    role: user.role, // ✅ 추가
+  };
 
   const accessToken = signAccessToken(payload);
   const refreshToken = signRefreshToken(payload);
 
-  // ✅ refreshToken은 DB에 "해시"로 저장 (원문 저장 X)
   const refreshTokenHash = await bcrypt.hash(refreshToken, 10);
   const refreshTokenExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
@@ -49,7 +52,11 @@ export async function loginService(userId: string, password: string) {
     ok: true as const,
     accessToken,
     refreshToken,
-    user: { userId: user.userId, name: user.name },
+    user: {
+      userId: user.userId,
+      name: user.name,
+      role: user.role, // ✅ 응답에도 추가
+    },
   };
 }
 

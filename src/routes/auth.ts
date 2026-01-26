@@ -48,7 +48,7 @@ router.post('/login', async (req, res) => {
   return res.json({
     success: true,
     message: '로그인 성공',
-    data: result.user,
+    data: result.user, // { userId, name, role }
   });
 });
 

@@ -13,11 +13,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
 model User {
   id       Int    @id @default(autoincrement())
   name     String @db.VarChar(30)
   userId   String @unique @db.VarChar(50)
   password String @db.VarChar(255)
+
+  role     Role   @default(USER)
 
   refreshTokenHash      String?  @db.VarChar(255)
   refreshTokenExpiresAt DateTime?

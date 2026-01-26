@@ -1,12 +1,13 @@
 import jwt from 'jsonwebtoken';
 
-type JwtUserPayload = {
+export type JwtUserPayload = {
   userId: string;
   name: string;
+  role: 'USER' | 'ADMIN';
 };
 
-const ACCESS_EXPIRES_IN = '1h'; // 3600s
-const REFRESH_EXPIRES_IN = '7d'; // 604800s
+const ACCESS_EXPIRES_IN = '1h';
+const REFRESH_EXPIRES_IN = '7d';
 
 export function signAccessToken(payload: JwtUserPayload) {
   return jwt.sign(payload, process.env.JWT_ACCESS_SECRET!, {

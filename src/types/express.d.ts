@@ -4,6 +4,7 @@ declare global {
       user?: {
         userId: string;
         name: string;
+        role: 'USER' | 'ADMIN';
       };
     }
   }
