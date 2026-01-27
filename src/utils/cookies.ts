@@ -2,40 +2,38 @@ import type { Response } from 'express';
 
 const isProd = process.env.NODE_ENV === 'production';
 
+const sameSite: 'none' | 'lax' = isProd ? 'none' : 'lax';
+
+const commonCookieOptions = {
+  httpOnly: true,
+  secure: isProd,
+  sameSite,
+  path: '/',
+} as const;
+
 export function setAuthCookies(
   res: Response,
   tokens: { accessToken: string; refreshToken: string },
 ) {
-  // accessToken: 1시간
   res.cookie('accessToken', tokens.accessToken, {
-    httpOnly: true,
-    secure: isProd, // ✅ 로컬 http면 false여야 쿠키가 들어감
-    sameSite: 'strict',
-    path: '/',
-    maxAge: 60 * 60 * 1000, // 3600s
+    ...commonCookieOptions,
+    maxAge: 60 * 60 * 1000,
   });
 
-  // refreshToken: 7일
   res.cookie('refreshToken', tokens.refreshToken, {
-    httpOnly: true,
-    secure: isProd,
-    sameSite: 'strict',
-    path: '/',
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 604800s
+    ...commonCookieOptions,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 }
 
 export function setAccessCookie(res: Response, accessToken: string) {
   res.cookie('accessToken', accessToken, {
-    httpOnly: true,
-    secure: isProd,
-    sameSite: 'strict',
-    path: '/',
+    ...commonCookieOptions,
     maxAge: 60 * 60 * 1000,
   });
 }
 
 export function clearAuthCookies(res: Response) {
-  res.clearCookie('accessToken', { path: '/' });
-  res.clearCookie('refreshToken', { path: '/' });
+  res.clearCookie('accessToken', commonCookieOptions);
+  res.clearCookie('refreshToken', commonCookieOptions);
 }
