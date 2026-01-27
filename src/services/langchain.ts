@@ -65,9 +65,18 @@ export async function handleChatRequest(
       referenceData: referenceDataText,
     });
 
+    const DEBUG = process.env.DEBUG === '1';
+
     // 4. LangChain 모델 호출
     const model = getChatModel();
+
+    const t = Date.now();
+    if (DEBUG) console.log('[LLM] invoke start');
+
     const response = await model.invoke(promptMessages);
+
+    if (DEBUG) console.log(`[LLM] invoke done ${Date.now() - t}ms`);
+
     const aiResponse = response.content.toString();
 
     // 5. 응답 파싱
@@ -79,6 +88,11 @@ export async function handleChatRequest(
       cards: parsedResponse.cards,
     };
   } catch (error) {
+    console.error('[handleChatRequest FAIL raw]', error);
+    if (error instanceof Error) {
+      console.error('[handleChatRequest FAIL msg]', error.message);
+      console.error('[handleChatRequest FAIL stack]', error.stack);
+    }
     return handleError(error, message);
   }
 }

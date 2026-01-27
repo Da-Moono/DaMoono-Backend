@@ -18,6 +18,21 @@ const __dirname = dirname(__filename);
 dotenv.config({ path: join(__dirname, '../.env') });
 
 const app = express();
+const DEBUG = process.env.DEBUG === '1';
+
+if (DEBUG) {
+  app.use((req, res, next) => {
+    const t0 = Date.now();
+    console.log(`[HTTP IN] ${req.method} ${req.originalUrl}`);
+    res.on('finish', () => {
+      console.log(
+        `[HTTP OUT] ${req.method} ${req.originalUrl} -> ${res.statusCode} (${Date.now() - t0}ms)`,
+      );
+    });
+    next();
+  });
+}
+
 app.set('trust proxy', 1);
 app.use(cookieParser());
 const httpServer = createServer(app);
