@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import jwt from 'jsonwebtoken';
+import { requireAuth } from '@/middleware/requireAuth.js';
 import {
   checkUserIdExists,
   createUser,
@@ -107,20 +108,21 @@ router.post('/refresh', async (req, res) => {
  * ✅ 로그아웃 API
  * POST /api/auth/logout
  */
+
 router.post('/logout', async (req, res) => {
   try {
     const refreshToken = req.cookies?.refreshToken;
 
-    // refresh가 있으면 그걸로 userId를 뽑아서 DB 토큰 제거
     if (refreshToken) {
       try {
         const payload = jwt.verify(
           refreshToken,
           process.env.JWT_REFRESH_SECRET!,
-        ) as any;
-        await logoutService(payload.userId);
+        ) as { id: number; role: 'USER' | 'ADMIN' };
+
+        await logoutService(payload.id);
       } catch {
-        // refresh가 깨졌어도 그냥 쿠키만 삭제하고 성공 처리
+        // refreshToken이 깨졌어도 쿠키 삭제로 마무리
       }
     }
 
@@ -132,10 +134,7 @@ router.post('/logout', async (req, res) => {
     });
   } catch (err) {
     console.error('❌ logout error:', err);
-    return res.status(500).json({
-      success: false,
-      message: '서버 에러',
-    });
+    return res.status(500).json({ success: false, message: '서버 에러' });
   }
 });
 
@@ -206,6 +205,17 @@ router.post('/signup', async (req, res) => {
     console.error('❌ signup error:', err);
     return res.status(500).json({ message: '서버 에러' });
   }
+});
+
+router.get('/me', requireAuth, (req, res) => {
+  return res.json({
+    success: true,
+    message: '인증됨',
+    data: {
+      authenticated: true,
+      id: req.user!.id,
+    },
+  });
 });
 
 export default router;

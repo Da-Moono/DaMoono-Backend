@@ -1,9 +1,10 @@
 import jwt from 'jsonwebtoken';
 
+export type Role = 'USER' | 'ADMIN';
+
 export type JwtUserPayload = {
-  userId: string;
-  name: string;
-  role: 'USER' | 'ADMIN';
+  id: number;
+  role: Role;
 };
 
 const ACCESS_EXPIRES_IN = '1h';

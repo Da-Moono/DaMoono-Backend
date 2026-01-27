@@ -28,11 +28,7 @@ export async function loginService(userId: string, password: string) {
     };
   }
 
-  const payload = {
-    userId: user.userId,
-    name: user.name,
-    role: user.role, // ✅ 추가
-  };
+  const payload = { id: user.id, role: user.role };
 
   const accessToken = signAccessToken(payload);
   const refreshToken = signRefreshToken(payload);
@@ -62,11 +58,10 @@ export async function loginService(userId: string, password: string) {
 
 export async function refreshService(refreshToken: string) {
   // 1) JWT 검증
-  const payload = verifyRefreshToken(refreshToken); // 만료되면 예외 발생
+  const payload = verifyRefreshToken(refreshToken);
 
-  // 2) 유저 존재 확인
   const user = await prisma.user.findUnique({
-    where: { userId: payload.userId },
+    where: { id: payload.id },
   });
 
   if (!user || !user.refreshTokenHash || !user.refreshTokenExpiresAt) {
@@ -101,19 +96,19 @@ export async function refreshService(refreshToken: string) {
 
   // 5) accessToken 새로 발급
   const newAccessToken = signAccessToken({
-    userId: user.userId,
-    name: user.name,
+    id: user.id,
     role: user.role,
   });
+
   return {
     ok: true as const,
     accessToken: newAccessToken,
   };
 }
 
-export async function logoutService(userId: string) {
+export async function logoutService(id: number) {
   await prisma.user.update({
-    where: { userId },
+    where: { id },
     data: {
       refreshTokenHash: null,
       refreshTokenExpiresAt: null,

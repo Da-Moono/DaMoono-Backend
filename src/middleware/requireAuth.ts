@@ -20,7 +20,6 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
     ) as JwtUserPayload;
 
     req.user = payload;
-
     return next();
   } catch (err: any) {
     if (err?.name === 'TokenExpiredError') {
