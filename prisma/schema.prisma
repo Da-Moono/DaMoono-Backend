@@ -53,3 +53,39 @@ model Subscribe {
   description   String @db.Text
   badges        Json
 }
+
+enum ConsultStatus {
+  WAITING
+  CONNECTED
+  ENDED
+}
+
+enum MessageSenderRole {
+  USER
+  CONSULTANT
+}
+
+model ConsultSession {
+  id           String        @id
+  userId       Int
+  consultantId Int?
+  status       ConsultStatus @default(WAITING)
+
+  messages     ConsultMessage[]
+
+  @@index([userId])
+  @@index([consultantId])
+}
+
+model ConsultMessage {
+  id         String            @id @default(cuid())
+  sessionId  String
+  seq        Int
+  senderRole MessageSenderRole
+  content    String            @db.Text
+
+  session    ConsultSession    @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, seq])
+  @@index([sessionId])
+}
