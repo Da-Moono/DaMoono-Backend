@@ -107,7 +107,10 @@ export const planData: CardData[] = [
       { label: '속도제한', value: '15Mbps' },
       { label: '음성통화', value: '무제한' },
       { label: '문자메시지', value: '500건' },
-      { label: '구독서비스', value: 'NETFLIX, YOUTUBE_PREMIUM, DISNEY+, WAVVE, TVING' },
+      {
+        label: '구독서비스',
+        value: 'NETFLIX, YOUTUBE_PREMIUM, DISNEY+, WAVVE, TVING',
+      },
     ],
   },
   {
@@ -168,7 +171,10 @@ export const planData: CardData[] = [
       { label: '속도제한', value: '8Mbps' },
       { label: '음성통화', value: '무제한' },
       { label: '문자메시지', value: '400건' },
-      { label: '구독서비스', value: 'NETFLIX, YOUTUBE_PREMIUM, DISNEY+, TVING' },
+      {
+        label: '구독서비스',
+        value: 'NETFLIX, YOUTUBE_PREMIUM, DISNEY+, TVING',
+      },
       { label: '뱃지', value: '추천' },
     ],
   },
@@ -193,7 +199,10 @@ export const planData: CardData[] = [
       { label: '속도제한', value: '12Mbps' },
       { label: '음성통화', value: '무제한' },
       { label: '문자메시지', value: '600건' },
-      { label: '구독서비스', value: 'NETFLIX, YOUTUBE_PREMIUM, DISNEY+, WAVVE, TVING, MILLIE' },
+      {
+        label: '구독서비스',
+        value: 'NETFLIX, YOUTUBE_PREMIUM, DISNEY+, WAVVE, TVING, MILLIE',
+      },
       { label: '뱃지', value: '프리미엄' },
     ],
   },
@@ -242,7 +251,10 @@ export const planData: CardData[] = [
       { label: '속도제한', value: '9Mbps' },
       { label: '음성통화', value: '무제한' },
       { label: '문자메시지', value: '450건' },
-      { label: '구독서비스', value: 'NETFLIX, YOUTUBE_PREMIUM, DISNEY+, WAVVE' },
+      {
+        label: '구독서비스',
+        value: 'NETFLIX, YOUTUBE_PREMIUM, DISNEY+, WAVVE',
+      },
       { label: '뱃지', value: '가족' },
     ],
   },
@@ -266,7 +278,10 @@ export const planData: CardData[] = [
       { label: '속도제한', value: '11Mbps' },
       { label: '음성통화', value: '무제한' },
       { label: '문자메시지', value: '550건' },
-      { label: '구독서비스', value: 'NETFLIX, YOUTUBE_PREMIUM, DISNEY+, TVING' },
+      {
+        label: '구독서비스',
+        value: 'NETFLIX, YOUTUBE_PREMIUM, DISNEY+, TVING',
+      },
       { label: '뱃지', value: '프로' },
     ],
   },
@@ -291,7 +306,10 @@ export const planData: CardData[] = [
       { label: '속도제한', value: '20Mbps' },
       { label: '음성통화', value: '무제한' },
       { label: '문자메시지', value: '1000건' },
-      { label: '구독서비스', value: 'NETFLIX, YOUTUBE_PREMIUM, DISNEY+, WAVVE, TVING, MILLIE' },
+      {
+        label: '구독서비스',
+        value: 'NETFLIX, YOUTUBE_PREMIUM, DISNEY+, WAVVE, TVING, MILLIE',
+      },
       { label: '뱃지', value: '최고급' },
     ],
   },
@@ -545,7 +563,10 @@ export const subscriptionData: CardData[] = [
     details: [
       { label: '유튜브 프리미엄', value: '포함' },
       { label: 'CGV 영화 1+1', value: '지원' },
-      { label: '혜택', value: '유튜브는 광고없이 프리미엄 영화는 1+1 스마트하게!' },
+      {
+        label: '혜택',
+        value: '유튜브는 광고없이 프리미엄 영화는 1+1 스마트하게!',
+      },
       { label: '뱃지', value: 'U+ 모바일 전용' },
     ],
   },
