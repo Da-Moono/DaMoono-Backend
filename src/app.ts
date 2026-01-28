@@ -4,6 +4,7 @@ import express from 'express';
 import authRouter from './routes/auth.js';
 import chatRouter from './routes/chat.js';
 import referenceRouter from './routes/reference.js';
+import summaryRouter from './routes/summary.js';
 
 export function createApp() {
   const app = express();
@@ -34,8 +35,9 @@ export function createApp() {
   );
   app.use(express.json());
 
+  app.use('/api', summaryRouter);
   app.use('/auth', authRouter);
-  app.use('/api', chatRouter);
+  app.use('/summary', chatRouter);
   app.use('/reference', referenceRouter);
 
   app.get('/health', (_req, res) => {
