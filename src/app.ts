@@ -3,6 +3,7 @@ import cors from 'cors';
 import express from 'express';
 import authRouter from './routes/auth.js';
 import chatRouter from './routes/chat.js';
+import consultHistoryRouter from './routes/consultHistory.js';
 import referenceRouter from './routes/reference.js';
 import summaryRouter from './routes/summary.js';
 
@@ -38,6 +39,7 @@ export function createApp() {
   app.use('/api', chatRouter);
   app.use('/auth', authRouter);
   app.use('/summary', summaryRouter);
+  app.use('/summary', consultHistoryRouter);
   app.use('/reference', referenceRouter);
 
   app.get('/health', (_req, res) => {
