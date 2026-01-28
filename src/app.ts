@@ -35,9 +35,9 @@ export function createApp() {
   );
   app.use(express.json());
 
-  app.use('/api', summaryRouter);
+  app.use('/api', chatRouter);
   app.use('/auth', authRouter);
-  app.use('/summary', chatRouter);
+  app.use('/summary', summaryRouter);
   app.use('/reference', referenceRouter);
 
   app.get('/health', (_req, res) => {
