@@ -138,7 +138,9 @@ export async function generateConsultantSummary(args: CreateArgs) {
       where: { sessionId, audience: 'CONSULTANT' },
       orderBy: { version: 'desc' },
     });
-    if (existing) return existing;
+    if (existing) {
+      return { ok: true as const, status: 200, payload: existing };
+    }
   }
 
   const messages = await prisma.consultMessage.findMany({
@@ -193,7 +195,11 @@ export async function generateConsultantSummary(args: CreateArgs) {
     },
   });
 
-  return { ...saved, _meta: { llmMs: ms, messageCount: messages.length } };
+  return {
+    ok: true as const,
+    status: 201,
+    payload: { ...saved, _meta: { llmMs: ms, messageCount: messages.length } },
+  };
 }
 
 export async function getConsultantSummary(args: GetArgs) {
